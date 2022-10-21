@@ -16,7 +16,18 @@
                 <%= allTodos[i].title %> 
            </td>
         </tr>
+        <tr>
+            <td>
+                <%= allTodos[i].dueDate %> 
+           </td>
+        </tr>
+        <tr>
+            <td>
+                <%= allTodos[i].completed %> 
+           </td>
+        </tr>
         <% } %>
     </table>
+    <%- include('footer.ejs') %>
 </body>
 </html>
