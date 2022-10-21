@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": ".husky"
+		},
+		{
+			"path": "__tests__"
+		},
+		{
+			"path": "config"
+		},
+		{
+			"path": "migrations"
+		},
+		{
+			"path": "models"
+		},
+		{
+			"path": "seeders"
+		}
+	]
+}
