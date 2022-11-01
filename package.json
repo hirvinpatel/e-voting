@@ -9,7 +9,8 @@
     "start1": "nodemon -e js,ejs",
     "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
    "test1": "NODE_ENV=test jest --detectOpenHandles",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "migrate": "sequelize db:migrate"
   },
   "lint-staged": {
     "*.js": [

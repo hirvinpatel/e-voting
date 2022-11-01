@@ -7,11 +7,18 @@ app.use(bodyParser.json());
 
 //set EJS as view engine
 app.set("view engine","ejs");
+app.use(express.static(path.join(__dirname,'public')));
 app.get("/", async(request, response) => {
   const allTodos=await Todo.getTodos();
+  const overdue = await Todo.overDue();
+  const dueLater = await Todo.dueLater();
+  const dueToday = await Todo.dueToday();
   if(request.accepts("html")){
     response.render('index',{
-      allTodos
+      allTodos,
+      overdue,
+      dueLater,
+      dueToday,
     });
   }else {
     response.json({
@@ -21,7 +28,7 @@ app.get("/", async(request, response) => {
  
 });
 
-app.use(express.static(path.join(__dirname,'public')));
+
 
 //app.get("/", function (request, response) {
  // response.send("Hello World");
