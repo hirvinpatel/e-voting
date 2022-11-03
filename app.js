@@ -7,18 +7,19 @@ app.use(bodyParser.json());
 
 //set EJS as view engine
 app.set("view engine","ejs");
+
 app.use(express.static(path.join(__dirname,'public')));
 app.get("/", async(request, response) => {
   const allTodos=await Todo.getTodos();
-  const overdue = await Todo.overDue();
-  const dueLater = await Todo.dueLater();
-  const dueToday = await Todo.dueToday();
+  //const overdue = await Todo.overDue();
+  //const dueLater = await Todo.dueLater();
+  //const dueToday = await Todo.dueToday();
   if(request.accepts("html")){
     response.render('index',{
-      allTodos,
-      overdue,
-      dueLater,
-      dueToday,
+      allTodos
+      //overdue,
+     // dueLater,
+     // dueToday,
     });
   }else {
     response.json({
@@ -93,7 +94,8 @@ app.delete("/todos/:id", async function (request, response) {
   // response.send(true)
   const todo = await Todo.findByPk(request.params.id);
   try {
-    const deletedTodo = await todo.destroy();
+    //const deletedTodo = 
+    await todo.destroy();
     return response.send(true);
   } catch (error) {
     console.log(error);
