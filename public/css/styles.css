@@ -1,4 +1,13 @@
 body{
+    
+    font-family: 'Roboto Condensed', sans-serif;
+}
+.Todo-Item:hover .trash-icon {
+    display: block;
+}
+.count-overdue
+{
+    width:20px;
+    height:20px;
     background-color: grey;
-    font-family:'Courier New', Courier, monospace;
 }
