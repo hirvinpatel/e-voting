@@ -7,6 +7,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" rel="stylesheet">
     <title>To-Do Manager</title>
+    <script>
+        function updateTodo(id){
+            fetch(`/todos/${id}/marksAsCompleted` , {
+                method: "put",
+                headers: {"Content-Type":"application/json"},
+            })
+            .then((res)=>{
+                if(res.ok)
+                {
+                    window.location.reload();
+                }
+                
+            })
+            .catch((err)=> console.error(err));
+        }
+        function deleteTodo(id){
+            fetch(`/todos/${id}` , {
+                method: "delete",
+                headers: {"Content-Type":"application/json"},
+            })
+            .then((res)=>{
+                if(res.ok)
+                {
+                    window.location.reload();
+                }
+                
+            })
+            .catch((err)=> console.error(err));
+        }
+    </script>
 </head>
 <body>
     <div class="grid grid-cols-6">
@@ -25,8 +55,7 @@
                     </div>
                 </div>
             </form>
-            <%- include('todos.ejs') %>
-           
+            <%- include('todos.ejs') %>           
         </div>
     </div>
 </body>
