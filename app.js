@@ -1,10 +1,16 @@
 const express = require("express");
 const app = express();
+var csrf = require("tiny-csrf");
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
+
 const path = require("path");
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser("Shhhhhh! some secret string is h"));
+
+app.use(csrf("123456789iamasecret987654321look"));
 
 //set EJS as view engine
 app.set("view engine", "ejs");
@@ -14,13 +20,16 @@ app.get("/", async (request, response) => {
   const allTodos = await Todo.getTodos();
   const overdue = await Todo.overDue();
   const dueLater = await Todo.dueLater();
+
   const dueToday = await Todo.dueToday();
+
   if (request.accepts("html")) {
     response.render("index", {
       allTodos,
       overdue,
       dueLater,
       dueToday,
+      csrfToken: request.csrfToken(),
     });
   } else {
     response.json({
