@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("Shhhhhh! some secret string is h"));
 
-app.use(csrf("123456789iamasecret987654321look"));
+app.use(csrf("123456789iamasecret987654321look",["POST","PUT","DELETE"]));
 
 //set EJS as view engine
 app.set("view engine", "ejs");
