@@ -1,7 +1,12 @@
 "use strict";
-const { Op, Model } = require("sequelize");
+const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
       // define association here
     }
@@ -11,51 +16,60 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static getTodos() {
-      return this.findAll();
+      return this.findAll({ order: [["id", "ASC"]] });
     }
 
     static overDue() {
       return this.findAll({
         where: {
           dueDate: {
-            [Op.lt]: new Date().toISOString(),
+            [Op.lt]: new Date().toLocaleDateString("en-CA"),
           },
-        },
-        order: [["id", "ASC"]],
-      });
-    }
-    static async dueLater() {
-      return this.findAll({
-        where: {
-          dueDate: {
-            [Op.gt]: new Date().toISOString(),
-          },
+          completed: false,
         },
         order: [["id", "ASC"]],
       });
     }
 
-    static async dueToday() {
+    static dueToday() {
       return this.findAll({
         where: {
           dueDate: {
-            [Op.eq]: new Date().toISOString(),
+            [Op.eq]: new Date().toLocaleDateString("en-CA"),
           },
+          completed: false,
         },
         order: [["id", "ASC"]],
       });
     }
-    static async remove(id) {
-      return this.destroy({
+    static dueLater() {
+      return this.findAll({
         where: {
-          id,
+          dueDate: {
+            [Op.gt]: new Date().toLocaleDateString("en-CA"),
+          },
+          completed: false,
         },
+        order: [["id", "ASC"]],
       });
     }
 
-    markAsCompleted() {
-      return this.update({ completed: true });
+    static completedItems() {
+      return this.findAll({
+        where: {
+          completed: true,
+        },
+        order: [["id", "ASC"]],
+      });
     }
+ // markAsCompleted() {
+    //   return this.update({ completed: true });
+    // }
+    setCompletionStatus(boole) {
+      return this.update({ completed: boole });
+    }
+
+   
   }
   Todo.init(
     {

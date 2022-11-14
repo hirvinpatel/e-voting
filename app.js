@@ -4,23 +4,22 @@ var csrf = require("tiny-csrf");
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
-
 const path = require("path");
+
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("Shhhhhh! some secret string is h"));
-
-app.use(csrf("123456789iamasecret987654321look",["POST","PUT","DELETE"]));
-
+app.use(csrf("Your_Secret_Key_Must_Be_32_Bits_",["POST","PUT","DELETE"]));
 //set EJS as view engine
 app.set("view engine", "ejs");
-
 app.use(express.static(path.join(__dirname, "public")));
+
+
 app.get("/", async (request, response) => {
   const allTodos = await Todo.getTodos();
   const overdue = await Todo.overDue();
   const dueLater = await Todo.dueLater();
-
+  const completedItems = await Todo.completedItems();
   const dueToday = await Todo.dueToday();
 
   if (request.accepts("html")) {
@@ -29,11 +28,15 @@ app.get("/", async (request, response) => {
       overdue,
       dueLater,
       dueToday,
+      completedItems,
       csrfToken: request.csrfToken(),
     });
   } else {
     response.json({
-      allTodos,
+      overdue,
+      dueToday,
+      dueLater,
+      completedItems,
     });
   }
 });
@@ -51,7 +54,7 @@ app.get("/todos", async function (request, response) {
   // Then, we have to respond with all Todos, like:
   // response.send(todos)
   try {
-    const todos = await Todo.findAll();
+    const todos = await Todo.findAll({ order: [["id", "ASC"]] });
     return response.send(todos);
   } catch (error) {
     console.log(error);
@@ -76,6 +79,7 @@ app.post("/todos", async function (request, response) {
     await Todo.addTodo({
       title: request.body.title,
       dueDate: request.body.dueDate,
+      completed: false,
     });
     //return response.json(todo);
     return response.redirect("/");
@@ -85,10 +89,11 @@ app.post("/todos", async function (request, response) {
   }
 });
 
-app.put("/todos/:id/markAsCompleted", async function (request, response) {
+app.put("/todos/:id", async function (request, response) {
+  console.log("Todo is marked as completed:",request.params.id);
   const todo = await Todo.findByPk(request.params.id);
   try {
-    const updatedTodo = await todo.markAsCompleted();
+    const updatedTodo = await todo.setCompletionStatus(request.body.completed);
     return response.json(updatedTodo);
   } catch (error) {
     console.log(error);
