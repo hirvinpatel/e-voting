@@ -41,10 +41,7 @@ app.get("/", async (request, response) => {
   }
 });
 
-//app.get("/", function (request, response) {
-// response.send("Hello World");
-// console.log("Todo list",request.body);
-//});
+
 
 app.get("/todos", async function (request, response) {
   console.log("Processing list of all Todos ...");
