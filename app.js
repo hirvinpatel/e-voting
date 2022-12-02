@@ -1,4 +1,5 @@
 const express = require("express");
+const flash = require("connect-flash");
 const app = express();
 var csrf = require("tiny-csrf");
 const { Todo, User } = require("./models");
@@ -18,6 +19,8 @@ app.use(cookieParser("Shhhhhh! some secret string is h"));
 app.use(csrf("Your_Secret_Key_Must_Be_32_Bits_", ["POST", "PUT", "DELETE"]));
 //set EJS as view engine
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
@@ -41,7 +44,7 @@ passport.use(
         .then(async (user) => {
           const result = await bcrypt.compare(password, user.password);
           if (result) return done(null, user);
-          else return done("Invalid Password");
+          else return done(null, false, { message: "Invalid Password" });
         })
         .catch((error) => {
           return error;
@@ -63,6 +66,11 @@ passport.deserializeUser((id, done) => {
     .catch((error) => {
       done(error, null);
     });
+});
+
+app.use(function (request, response, next) {
+  response.locals.messages = request.flash();
+  next();
 });
 app.get("/", async (request, response) => {
   response.render("index", {
@@ -141,7 +149,10 @@ app.get("/login", (request, response) => {
 
 app.post(
   "/session",
-  passport.authenticate("local", { failureRedirect: "/login" }),
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
   (request, response) => {
     console.log(request.user);
     response.redirect("/todos");

@@ -18,6 +18,7 @@ const login = async (agent, username, password) => {
     password: password,
     _csrf: csrfToken,
   });
+  res.render(req.flash(type, message));
 };
 describe("Todo Application", function () {
   beforeAll(async () => {
@@ -46,6 +47,7 @@ describe("Todo Application", function () {
       _csrf: csrfToken,
     });
     expect(res.statusCode).toBe(302);
+    //res.render(req.flash(type, message));
   });
 
   test("Sign out", async () => {
