@@ -19,8 +19,8 @@
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({
                     "_csrf": token,
-                    completed:boole
-                })
+                    completed:boole,
+                }),
           })
             .then((res)=>{
                 if(res.ok)
@@ -36,7 +36,7 @@
                 method: "DELETE",
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify({
-                    "_csrf": token
+                    "_csrf": token,
                 })
           })
             .then((res)=>{
@@ -55,14 +55,21 @@
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
            <a href="/signout" class="text-green-600">Signout</a>
+           <% if(messages && messages.error && messages.error.length > 0)  { %>
+            <% for(var i=0; i<messages.error.length; i++) { %>
+                    <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
+            <% } %>
+          <% } %>
             <form action="/todos" method="post">
+                              
                 <input type="hidden"  name="_csrf" value="<%= csrfToken %>"/>
+                
                 <div class="flex gap-2" py="4">
                     <div class="flex-auto">
                         <input type="text" name="title" placeholder="What's Next?" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm"></input>
                     </div>
                     <div class="flex-auto">
-                        <input type="date" name="dueDate" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4 " required></input>
+                        <input type="date" name="dueDate" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4 "></input>
                     </div>
                     <div class="flex-none">
                         <button type="submit" class="bg-green-600 text-white px-5 py-1.5 rounded fond-medium mr-2 mb-2" >Add</button>
