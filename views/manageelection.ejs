@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+                <%- include('header.ejs') %>
+               <!-- <div class="flex justify-between">
+                    <div>
+                        <a href="/signout" class="text-green-600 ">Signout</a>
+                    </div>
+    
+                </div>
+                <h1 class="py-4"><b>Create New Election</b></h1>-->
+                <% if(messages && messages.error && messages.error.length > 0)  { %>
+                    <% for(var i=0; i<messages.error.length; i++) { %>
+                            <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
+                    <% } %>
+                  <% } %>
+                 <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
+                  
+                    <div class="py-3">
+                        <h2 class=" text-green-900  text-xl font-bold">This election has <%= countQuestion %> Questions </h2>
+                    </div>
+                   <div class="py-3">
+                        <h2 class=" text-green-900  text-xl font-bold">This election has <%= countVoter %> Voters </h2>
+                    </div> 
+                    <div class="py-3">
+                        <a href="/question/<%= id %>" class="py-1 hover:text-green-800 text-black-600">Manage Question</a>
+                    </div>
+                    <div>
+                        <a href="/voter/<%=id %>" class="py-1 hover:text-green-800 text-black-600">Manage voters</a>
+                    </div>
+                    <div class="py-3"> 
+                        <a href="/election/<%=id%>/launch" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Launch election</a>
+                        <a href=" " class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Preview</a>
+                        <a href=" " class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Result</a>
+                        <a href=" " class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">End</a>
+                        
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </body>
+    </html>

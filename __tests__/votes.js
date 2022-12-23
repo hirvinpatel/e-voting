@@ -20,7 +20,7 @@ const login = async (agent, username, password) => {
   });
   //res.render(req.flash(type, message));
 };
-describe("Todo Application", function () {
+describe("Voting Application", function () {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
     server = app.listen(process.env.PORT || 4000, () => {});
@@ -39,7 +39,7 @@ describe("Todo Application", function () {
   test("Sign Up", async () => {
     let res = await agent.get("/signup");
     let csrfToken = extractCsrfToken(res);
-    res = await agent.post("/users").send({
+    res = await agent.post("/admin").send({
       firstName: "Aneri",
       lastName: "Patel",
       email: "aneripatel@gmail.com",
@@ -51,15 +51,15 @@ describe("Todo Application", function () {
   });
 
   test("Sign out", async () => {
-    let res = await agent.get("/todos");
+    let res = await agent.get("/election");
     expect(res.statusCode).toBe(200);
     res = await agent.get("/signout");
     expect(res.statusCode).toBe(302);
-    res = await agent.get("/todos");
+    res = await agent.get("/election");
     expect(res.statusCode).toBe(302);
   });
 
-  test("Creates a todo and responds with json at /todos POST endpoint", async () => {
+  /*test("Creates a todo and responds with json at /todos POST endpoint", async () => {
     const agent = request.agent(server);
     await login(agent, "aneripatel@gmail.com", "111");
     const res = await agent.get("/todos");
@@ -135,5 +135,5 @@ describe("Todo Application", function () {
       .send({ _csrf: csrfToken });
 
     expect(deletedTodo.text).toBe("true");
-  });
+  });*/
 });

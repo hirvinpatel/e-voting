@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+                <%- include('header.ejs') %>
+                <div>
+                    <a href="/signout" class="text-green-600 ">Signout</a>
+                </div>
+                <div>
+                    <div>
+                        <h1 class="text-green-600 content-between text-3xl mt-10"><b>Welcome <%= userName %> !!!! </b></h1>
+                    </div>
+                   
+    
+                </div>
+                <div>
+                    <!--<h2 class="mt-5 text-lg">You haven't created any elections yet!!!</h2>-->
+                
+                    <a href="/createelection" class="py-4 text-green-600 mt-10">Create New Election</a>
+                </div>
+            <div class="flex-auto">
+                <%- include('electionlist.ejs') %>
+            </div>
+              <!--  <% if(messages && messages.error && messages.error.length > 0)  { %>
+                    <% for(var i=0; i<messages.error.length; i++) { %>
+                            <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
+                    <% } %>
+                  <% } %>-->
+                
+                
+                
+            </div>
+        </div>
+    </body>
+    </html>

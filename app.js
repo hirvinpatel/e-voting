@@ -2,11 +2,10 @@ const express = require("express");
 const flash = require("connect-flash");
 const app = express();
 var csrf = require("tiny-csrf");
-const { Todo, User } = require("./models");
+const { Admin,Voter,Election,Question,Option } = require("./models");
 const bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 const path = require("path");
-
 const passport = require("passport");
 const connectEnsureLogin = require("connect-ensure-login");
 const session = require("express-session");
@@ -37,13 +36,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(
+  "admin-local",
   new LocalStrategy(
     {
       usernameField: "email",
       passwordField: "password",
     },
     (username, password, done) => {
-      User.findOne({ where: { email: username } })
+      Admin.findOne({ where: { email: username } })
         .then(async (user) => {
           const result = await bcrypt.compare(password, user.password);
           if (result) {
@@ -61,13 +61,39 @@ passport.use(
     )
 );
 
+passport.use(
+  "voter-local",
+  new LocalStrategy(
+    {
+      usernameField: "voterId",
+      passwordField: "password",
+    },
+    (request,username, password, done) => {
+      Voter.findOne({ where: { voterId: username,electionId:request.params.id } })
+        .then(async (voter) => {
+          const result = await bcrypt.compare(password, voter.password);
+          if (result) {
+            return done(null, voter);
+          } else {
+            return done(null, false, { message: "Incorrect password" });
+          }
+        })
+        .catch(() => {
+          return done(null, false, { message: "Please Check Voter Id" });
+          //return done(error)
+        });
+    }
+    
+    )
+);
+
 passport.serializeUser((user, done) => {
   console.log("Serializing user in session", user.id);
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  User.findByPk(id)
+  Admin.findByPk(id)
     .then((user) => {
       done(null, user);
     })
@@ -82,93 +108,89 @@ app.use(function (request, response, next) {
 });
 
 app.get("/", async (request, response) => {
-  if (request.session.passport) {
-    res.redirect("/todos");
+  if (request.user) {
+    return response.redirect("/election");
   }
   else{
   response.render("index", {
-    title: "Todo Application",
-    csrfToken: request.csrfToken(),
+    title: "Online Voting Application",
+   // csrfToken: request.csrfToken(),
   });
 }
 });
 app.get(
-  "/todos",
+  "/createelection",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    response.render("newelection", {
+      title: "Create new election",
+      csrfToken: request.csrfToken(),
+    });
+  }
+);
+app.get("/election",
   connectEnsureLogin.ensureLoggedIn(),async (request, response) => {
     // console.log(request.user);
-    const loggedInUser = request.user.id;
-    const allTodos = await Todo.getTodos();
-    const overdue = await Todo.overDue(loggedInUser);
-    const dueLater = await Todo.dueLater(loggedInUser);
-    const completedItems = await Todo.completedItems(loggedInUser);
-    const dueToday = await Todo.dueToday(loggedInUser);
-
+      const userName = request.user.firstName;
+      const electionlist = await Election.getAllElection(request.user.id);
+      console.log("electionlist");
+      try {
     if (request.accepts("html")) {
-      response.render("todos", {
-        allTodos,
-        overdue,
-        dueLater,
-        dueToday,
-        completedItems,
+      response.render("election", {
+        electionlist,
+        userName,
         csrfToken: request.csrfToken(),
+        title:"Online Voting Platform ",
+        
       });
     } else {
       response.json({
-        overdue,
-        dueToday,
-        dueLater,
-        completedItems,
+        electionlist,
       });
     }
+  }catch(error){
+    console.log(error);
+    return response.status(422).json(error);
+  }
+}
+);
+
+app.get( "/index",  connectEnsureLogin.ensureLoggedIn(),  async (request, response) => {
+    response.render("index", { csrfToken: request.csrfToken() });
   }
 );
 app.get("/signup", (request, response) =>{
+  try{
   response.render("signup", {
-    title: "signup",
+    title: "Signup as Admin",
     csrfToken: request.csrfToken(),
   });
+}catch(err)
+{
+  console.log(err);
+}
 });
 
-/*app.get("/todos", async function (request, response) {
-  console.log("Processing list of all Todos ...");
-  // FILL IN YOUR CODE HERE
 
-  // First, we have to query our PostgerSQL database using Sequelize to get list of all Todos.
-  // Then, we have to respond with all Todos, like:
-  // response.send(todos)
-  try {
-    const todos = await Todo.findAll({ order: [["id", "ASC"]] });
-    return response.send(todos);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
-
-app.get("/todos/:id", async function (request, response) {
-  try {
-    const todo = await Todo.findByPk(request.params.id);
-    console.log(todo);
-    return response.json(todo);
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
-*/
 app.get("/login", (request, response) => {
-  response.render("login", { title: "login", csrfToken: request.csrfToken() });
+  if (request.user) {
+    return response.redirect("/election");
+  }
+  response.render("login", 
+  { title: "login to admin account",
+   csrfToken: request.csrfToken(),
+   });
 });
 
 app.post(
   "/session",
-  passport.authenticate("local", {
+  passport.authenticate("admin-local", {
     failureRedirect: "/login",
     failureFlash: true,
   }),
   (request, response) => {
     console.log(request.user);
-    response.redirect("/todos");
+    response.redirect("/election");
   }
 );
 app.get("/signout", (request, response, next) => {
@@ -178,8 +200,46 @@ app.get("/signout", (request, response, next) => {
     } else response.redirect("/");
   });
 });
-app.post("/users", async function (request, response) {
-  console.log(request.body);
+app.get("/electionlist/:id",connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    try {
+      const voter = await Voter.getAllVoter(request.params.id);
+      const voter_count = await Voter.countVoter(request.params.id);
+      const question = await Question.getAllQuestion(request.params.id);
+      const question_count = await Question.countQuestion(request.params.id);
+      const election= await Election.findByPk(request.params.id);
+      const electionName = await Election.getAllElection(request.params.id,request.user.id);
+      console.log(electionName);
+     
+      response.render("manageelection", {
+        election: election,
+        urlName: election.urlName,
+        title: electionName.electionName,
+        countQuestion: question_count,
+        countVoter: voter_count,
+        voter: voter,
+        question: question,
+        id: request.params.id,
+      });
+    } catch (error) {
+      console.log(error);
+      return response.status(422).json(error);
+    }
+  }
+);
+app.get(
+  "/question/:id",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    response.render("newquestion", {
+      title: "Create new Question",
+      id: request.params.id,
+      csrfToken: request.csrfToken(),
+    });
+  }
+);
+app.post("/admin", async function (request, response) {
+/*  console.log(request.body);
   if(request.body.firstName.length<1 )
   {
     request.flash("error", "please enter First Name");
@@ -200,11 +260,12 @@ app.post("/users", async function (request, response) {
     request.flash("error", "please enter password consist of minimum 8 characters");
      return response.redirect('/signup');
   }
+  */
   // hash password using bcrypt
   const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
   console.log(hashedPwd);
   try {
-    const user = await User.create({
+    const user = await Admin.create({
       firstName: request.body.firstName,
       lastName: request.body.lastName,
       email: request.body.email,
@@ -215,19 +276,20 @@ app.post("/users", async function (request, response) {
         console.log(err);
         console.redirect("/");
       }
-      return response.redirect("/todos");
+      else
+         response.redirect("/election");
     });
   } catch (error) {
-    console.log(error);
-    request.flash("error", error.message);
-    return response.status(422).json(error);
-    //return response.redirect("/signup");
+   // console.log(error);
+   // request.flash("error", error.message);
+    //return response.status(422).json(error);
+   return response.redirect("/signup");
   }
 });
 
-app.post("/todos",connectEnsureLogin.ensureLoggedIn(),
+app.post("/election",connectEnsureLogin.ensureLoggedIn(),
   async function (request, response) {
-    console.log(request.user);
+    /*console.log(request.user);
     if(request.body.title== null || request.body.title.length<5)
     {
       request.flash('error', 'please enter a todo title with minimum 5 characters');
@@ -237,16 +299,17 @@ app.post("/todos",connectEnsureLogin.ensureLoggedIn(),
       request.flash('error', 'please select date');
       return response.redirect('/todos');
     }
+    */
     try {
       //const todo =
-      await Todo.addTodo({
-        title: request.body.title,
-        dueDate: request.body.dueDate,
-        userId: request.user.id,
-        completed: false,
+      await Election.addElection({
+        electionName: request.body.electionName,
+        adminId: request.user.id,
+        urlName:request.body.urlName,
+      
       });
       //return response.json(todo);
-      return response.redirect("/todos");
+      response.redirect("/election");
     } catch (error) {
       console.log(error);
       request.flash("error", error.message);
@@ -255,7 +318,7 @@ app.post("/todos",connectEnsureLogin.ensureLoggedIn(),
   }
 );
 
-app.put(
+/*app.put(
   "/todos/:id",
   connectEnsureLogin.ensureLoggedIn(),
   async function (request, response) {
@@ -289,5 +352,5 @@ app.delete("/todos/:id",connectEnsureLogin.ensureLoggedIn(),async function (requ
     }
   }
 );
-
+*/
 module.exports = app;

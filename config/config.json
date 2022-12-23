@@ -2,14 +2,14 @@
   "development": {
     "username": "postgres",
     "password": "hiral",
-    "database": "wd-todo-dev",
+    "database": "voting_db_dev",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
     "password": "hiral",
-    "database": "wd-todo-test",
+    "database": "voting_db_test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
@@ -17,6 +17,5 @@
     "use_env_variable": "DATABASE_URL",
     "dialect": "postgres"
     
-    }
   }
-
+}

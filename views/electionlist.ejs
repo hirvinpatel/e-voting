@@ -1,0 +1,42 @@
+<%
+function romanize(num) {
+    var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
+    for ( i in lookup ) {
+      while ( num >= lookup[i] ) {
+        roman += i;
+        num -= lookup[i];
+      }
+    }
+    return roman;
+  }
+%>
+<div>  
+    <p class="text-green-600">
+        <%
+        if(electionlist.length==0)
+        { %>
+            <div>
+                <h2 class="py-4 text-green-600 mt-10">No Election Yet!!</h2>
+            </div>
+        <%   
+        }
+        else
+        {
+          
+        } %></p>
+        <div>
+    <ul class="list-none">
+        <% for (let i=0; i<electionlist.length; i++) { %>
+            <li>
+                <div class="flex px-2 py-2 rounded items-center w-fit my-3 ">
+                    <h2  class="py-4 text-black-600 mt-10">
+                        <a href="/electionlist/<%=electionlist[i].id %>" class="py-4 text-black-600 mt-10 hover:text-green-800">
+                            <%=romanize(i+1)%>)<%= electionlist[i].electionName %> 
+                        </a>
+                    </h2>
+                </div>
+            </li>
+        <% } %>
+    </ul>
+        </div>
+</div>

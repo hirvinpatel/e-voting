@@ -15,16 +15,16 @@
         <div class="grid grid-cols-6">
             <div class="col-start-3 col-span-2">
                 <%- include('header.ejs') %>
-                <h1 class="py-4"><b>Login to your Account</b></h1>
-              <!--  <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <h6 class="py-4">Login to your account</h6>
+                <% if(messages && messages.error && messages.error.length > 0)  { %>
                     <% for(var i=0; i<messages.error.length; i++) { %>
                             <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
                     <% } %>
-                  <% } %>-->
-                  <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
+                  <% } %>
+
                 <form action="/session" method="post"> 
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <!--<h6 class="py-4">What is your election's name?</h4>-->
+                    
                     <div class="py-3">
                         <label for="email">Email:</label>
                         <input type="email" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="email"/>
@@ -35,7 +35,7 @@
                     </div>
               
                     <div class="py-3"> 
-                        <button type="submit" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Submit</button>
+                        <button type="submit" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Sign In</button>
                     </div>
                 </form>
                 
