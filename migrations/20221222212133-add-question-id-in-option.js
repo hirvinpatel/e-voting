@@ -10,7 +10,8 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.addColumn("Options","questionId", {
-      type: Sequelize.DataTypes.INTEGER
+      type: Sequelize.DataTypes.INTEGER,
+      onDelete:"CASCADE",
     });
     await queryInterface.addConstraint("Options", {
       fields: ["questionId"],

@@ -11,6 +11,7 @@ module.exports = {
      */
     await queryInterface.addColumn("Voters", "electionId", {
       type: Sequelize.DataTypes.INTEGER,
+      onDelete: "CASCADE",
     });
     await queryInterface.addConstraint("Voters", {
       fields: ["electionId"],
