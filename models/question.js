@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "questionId",
       });
     }
-    static addQuestion(questionName, description, electionId) {
+    static addQuestion({questionName, description, electionId}) {
       return this.create({
         questionName: questionName,
         description: description,
@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
         order: [["id", "ASC"]],
       });
     }
-    static getAllQuestion(id) {
+    static getAllQuestion(electionId) {
       return this.findAll({
         where: {
-          id,
+          electionId,
         },
         order: [["id", "ASC"]],
       });
@@ -61,18 +61,18 @@ module.exports = (sequelize, DataTypes) => {
         }
       );
     }
-    static deleteQuestion(questionId) {
+    static deleteQuestion(id) {
       return this.destroy({
         where: {
-          questionId,
+        id,
         },
       });
     }
 
   }
   Question.init({
-    questionName: DataTypes.STRING,
-    description: DataTypes.STRING
+    questionName:DataTypes.STRING,
+    description:DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Question',

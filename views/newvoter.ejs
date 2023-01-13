@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        <%= title %>
+        Create New Voter
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" rel="stylesheet">
@@ -22,26 +22,26 @@
                     </div>
     
                 </div>
-                <h1 class="py-4"><b>Create New Election</b></h1>
+                <h1 class="py-4"><b>Create Voter</b></h1>
                 <% if(messages && messages.error && messages.error.length > 0)  { %>
                     <% for(var i=0; i<messages.error.length; i++) { %>
                             <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
                     <% } %>
                   <% } %>
                  <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
-                <form action="/election" method="post"> 
+                <form action="/newvoter/<%= id %>" method="post"> 
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <div class="py-3">
-                        <label for="electionName">Election Name:</label>
-                        <input type="text" id="electionName"class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="electionName" placeholder="Enter Election Name"/>
+                        <label for="voterid">Voter Id:</label>
+                        <input type="text" id="voterId" name="voterId" class="border border-gray-300 text-gray-900 rounded p-2 w-full"  placeholder="Enter Unique Voter Id" />
                     </div>
                    <div class="py-3">
-                        <label for="urlName">Election Url:</label>
-                        <input type="text" id="urlName" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="urlName"/>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="password"/>
                     </div> 
               
                     <div class="py-3"> 
-                        <button type="submit" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Create Election</button>
+                        <button type="submit" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Create Voter</button>
                     </div>
                 </form>
                 

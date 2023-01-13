@@ -62,7 +62,30 @@ module.exports = (sequelize, DataTypes) => {
         order: [["id", "ASC"]],
       });
     }
-
+    static launch(id) {
+      return this.update(
+        {
+          launched: true,
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+    }
+    static end(id) {
+      return this.Election.update(
+        {
+          ended: true,
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+    }
    
    
   }

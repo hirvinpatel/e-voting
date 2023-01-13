@@ -28,7 +28,7 @@
                     <% } %>
                   <% } %>
                  <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
-                  
+                       <a href="/signout" class="text-green-600 ">Signout</a>
                     <div class="py-3">
                         <h2 class=" text-green-900  text-xl font-bold">This election has <%= countQuestion %> Questions </h2>
                     </div>
@@ -39,13 +39,13 @@
                         <a href="/question/<%= id %>" class="py-1 hover:text-green-800 text-black-600">Manage Question</a>
                     </div>
                     <div>
-                        <a href="/voter/<%=id %>" class="py-1 hover:text-green-800 text-black-600">Manage voters</a>
+                        <a href="/newvoter/<%=id %>" class="py-1 hover:text-green-800 text-black-600">Manage voters</a>
                     </div>
                     <div class="py-3"> 
-                        <a href="/election/<%=id%>/launch" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Launch election</a>
-                        <a href=" " class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Preview</a>
-                        <a href=" " class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Result</a>
-                        <a href=" " class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">End</a>
+                        <a href="/election/<%=id%>/launch" class="hover:bg-green-800 bg-green-400 text-white  py-1.5 rounded font-medium px-5 py-2">Launch election</a>
+                        <a href=" " class="hover:bg-green-800 bg-green-400 text-white  py-1.5 rounded font-medium px-5 py-2">Preview</a>
+                        <a href=" " class="hover:bg-green-800 bg-green-400 text-white  py-1.5 rounded font-medium px-5 py-2">Result</a>
+                        <a href=" " class="bg-green-400 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">End</a>
                         
                     </div>
                 </form>

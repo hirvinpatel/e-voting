@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<%= csrfToken %>">
     <title>
-        <%= title %>
+       New Question
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="./css/styles.css" rel="stylesheet">
@@ -15,31 +15,31 @@
         <div class="grid grid-cols-6">
             <div class="col-start-3 col-span-2">
                 <%- include('header.ejs') %>
-                <h1 class="py-4"><b>Create New Election</b></h1>
+                <h1 class="py-4"><b>Create New Question</b></h1>
                 <% if(messages && messages.error && messages.error.length > 0)  { %>
                     <% for(var i=0; i<messages.error.length; i++) { %>
                             <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
                     <% } %>
                   <% } %>
 
-                <form action="/question/<%= id%>" method="post"> 
+                <form action="/createquestion/<%= id %>" method="post"> 
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <label for="'questionname" class="py-4">What is your question?</label>
+                    <label for="'questionName" class="py-4">What is your question?</label>
                     <div class="py-3">
-                        <!--<label for="email">Email:</label>-->
-                        <input type="text" id="questionname" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="questionname" placeholder="Enter your Question" required/>
+                        <!--<label for="questionName">Question:</label>-->
+                        <input type="text" id="questionName" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="questionName" placeholder="Enter your Question" required/>
                     </div>
                     <div class="py-3">
                         <label for="description">Description:</label>
-                        <input type="text" id="description" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="password"/>
-                    </div>-->
-              
+                        <input type="text" id="description" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="description"/>
+                    </div>
+        
                     <div class="py-3"> 
                         <button type="submit" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Create Question</button>
                     </div>
                 </form>
                 
             </div>
-        </div>
+        </div>  
     </body>
     </html>

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
     }
-    static addOption(optionName, questionId) {
+    static addOption({optionName, questionId}) {
       return this.create({
         optionName: optionName,
         questionId: questionId,                   
@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         },
       });
     }
-    static getAllOption(id) {
+    static getAllOption(questionId) {
       return this.findAll({
         where: {
-          id,
+          questionId,
         },
         order: [["id", "ASC"]],
       });

@@ -16,11 +16,11 @@
             <div class="col-start-3 col-span-2">
                 <%- include('header.ejs') %>
                 <h6 class="py-4">Create an Admin Account</h6>
-                <!--<% if (messages && messages.error && messages.error.length > 0) { %>
+                <% if (messages && messages.error && messages.error.length > 0) { %>
                     <% for(var i=0; i<messages.error.length; i++) { %>
                         <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
                     <% } %>
-                <% } %> -->
+                <% } %> 
                 <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
                 <form action="/admin" method="post">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <title>
+        <%= title %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+        function removequestion(id) {
+            fetch(`/deletequestion/${id}`, {
+                method: "delete",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({
+                    "_csrf":token
+                })
+            }).then((res)=>{
+                if (res.ok) {
+                    window.location.reload();
+                }
+            }).catch((err)=> console.error(err))
+        }
+    </script>
+    <link href="./css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+                <%- include('header.ejs') %>
+                
+                    <a href="/" class="text-green-600 "><u>Home</u></a>
+                    <a href="/signout" class="text-green-600 ">Signout</a>
+                    <b><h5 class="text-2xl"> Questions List of <%= title %></h5></b>
+                </div>
+                </div>
+                <div class="flex items-center justify-between">
+                <div>
+                    <!--<h2 class="mt-5 text-lg">You haven't created any elections yet!!!</h2>-->
+                
+                    <a href="/createquestion/<%= id %>" class="px-10 content-between py-4 text-green-600 mt-10">Create New Question</a>
+                </div>
+                <div>
+                    <a href="/electionlist/<%=id%>" class="px-10 text-green-600 mt-10">Goto Previous Page</a>
+               </div>
+            </div>
+                <div class="flex-auto">  
+                <div class="mx-5">
+                  <div class="grid grid-cols-6">
+                      <div class="col-start-3 col-span-2">
+                        <p class="text-red-800">
+                          <%= (question.length==0)?"No question added yet":"" %>
+                        </p>
+                              <ol class="list-[upper-roman]">
+                                  <% for (let i=0; i<question.length; i++)  { %>
+                                    <%  console.log("Question--->",question.length); %>
+                                   <li>
+                                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                                   <div class="flex justify-between items-center w-full my-3 px-4">
+                                      
+                                      <div class="content-center">
+                                          
+                                        
+                                          <a href="/show/question/<%= id %>/<%= question[i].id%>/options" class="py-4 text-black-600 mt-10 hover:text-green-800"><%= question[i].question %></a>
+                                          <p class="text-black-00 text-md my-2"><a href="/show/question/<%=election.id%>/<%=question[i].id%>/options"><%= question[i].questionName %></p></a>
+                                    
+                                          </div>
+                                          
+                                          <div class="flex gap-2 text-600 content center">
+                                            <div class="rounded w-fit px-2 py-1 mt-3 flex gap-2 cursor-pointer hover:text-600">
+                                      <a href="/election/<%=election.id%>/question/<%=question[i].id%>/modify" class="text-sm">edit question</a>
+                                           </div>
+                                  
+                                  <% if((question.length)>=1) {%> 
+                                  <div class="flex px-2 py-1 cursor-pointer hover:text-600 rounded items-center w-fit my-3  ">    
+                                      <a onclick="removequestion(<%= question[i].id %>)" class="text-sm">delete question</a>
+                                       <%} %>
+                                  </div>
+                                </div>
+                            </div>
+                                  </li>
+                                  <% } %>
+                              </ol>
+                      </div>
+                  </div>
+              </div>
+            <!-- <% if(messages && messages.error && messages.error.length > 0)  { %>
+                <% for(var i=0; i<messages.error.length; i++) { %>
+                        <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
+                <% } %>
+              <% } %>--> 
+              
+            </body>
+            </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

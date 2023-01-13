@@ -38,6 +38,18 @@ module.exports = (sequelize, DataTypes) => {
         },
       });
     }
+    static changePassword(voterId, newpassword) {
+      return this.update(
+        {
+          password: newpassword,
+        },
+        {
+          where: {
+            voterId: voterId,
+          },
+        }
+      );
+    }
     static deleteVoter(voterId) {
       return this.destroy({
         where: {
@@ -48,7 +60,11 @@ module.exports = (sequelize, DataTypes) => {
 
   }
   Voter.init({
-    voterId: DataTypes.STRING,
+    voterId:
+    {
+      type: DataTypes.INTEGER,
+      unique: true,
+    },
     password: DataTypes.STRING,
     voted: DataTypes.BOOLEAN
   },

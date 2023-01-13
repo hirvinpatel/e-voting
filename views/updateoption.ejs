@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="flex flex-col justify-center items-center p-4">
+      <div class="flex flex-col justify-center md:w-2/5 w-full">
+        <%- include('header.ejs') %>
+        <a href="/" class="text-green-600 "><u>Home</u></a>
+                    <a href="/signout" class="text-green-600 ">Signout</a>
+        <div class="pt-6">
+            <h1 class="py-4"><b>EDIT OPTION</b></h1>
+            <form  method="post" action="/election/<%=election.id%>/question/<%=question.id%>/options/<%=option.id %>/change">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+              <div class="flex flex-col w-full py-3">
+                <input
+                  type="text" name="optionName" value="<%= option.optionName %>" placeholder=" optionName"
+                  class="border border-gray-300 text-gray-900 rounded p-2 w-full "
+                />
+              </div>
+              <div class="flex justify-center items-center w-full gap-7 py-3">
+                <button
+                  type="submit"
+                  class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2"
+                >
+                  Modify Option
+                </button>
+                <a  href="/show/question/<%= election.id %>/<%= question.id %>/options"
+                  class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">
+                  
+                  Cancle
+                </a>
+              </div>
+            </form>
+        </div>
+        <% if(messages && messages.error && messages.error.length > 0)  { %>
+          <% for(var i=0; i<messages.error.length; i++) { %>
+                  <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
+          <% } %>
+        <% } %>      
+    </div>
+  </div>
+</div>
+</body>
+</html>
