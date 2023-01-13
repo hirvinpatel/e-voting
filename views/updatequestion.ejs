@@ -15,37 +15,22 @@
         <div class="pt-6">
 
             <h1 class="py-4"><b>EDIT QUESTION</b></h1>
-            <form
-              method="post"
-              action="/election/<%=election.id%>/question/<%=question.id%>/modify">
+            <form method="post"  action="/election/<%=election.id%>/question/<%=question.id%>/modify">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
               <div class="flex flex-col w-full py-3">
-                <input
-                  type="text"
-                  name="questionName"
-                  value="<%= question.questionName %>"
-                  placeholder="questionName"
+                <input type="text" name="questionName" value="<%= question.questionName %>" placeholder="question Name"
                   class="border border-gray-300 text-gray-900 rounded p-2 w-full "
                 />
               </div>
               <div class="flex flex-col w-full py-3">
-                <input  type="text"
-                  name="description"
-                  value="<%= question.description %>"
-                  placeholder="description"
+                <input  type="text" name="description" value="<%= question.description %>" placeholder="description"
                   class="border border-gray-300 text-gray-900 rounded p-2 w-full "
                 />
               </div>
               <div class="flex justify-center items-center w-full gap-7 py-3">
-                <button
-                  type="submit"
-                  class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2"
-                >
-                  Modify
-                </button>
-                <a href="/question/<%= election.id%>" type="reset"
-                  class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">
-                  
+                <button type="submit" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2"
+                > Modify Question  </button>
+                <a href="/question/<%= election.id%>" type="reset"  class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">
                   Cancle
                 </a>
               </div>

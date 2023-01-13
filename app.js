@@ -467,7 +467,7 @@ app.get(
         election: election,
         question: Question,
         option: option,
-        csrf: request.csrfToken(),
+        csrfToken: request.csrfToken(),
       });
     }
  
@@ -476,6 +476,7 @@ app.post(
   "/election/:electionId/question/:questionId/options/:optionId/modify",
   connectEnsureLogin.ensureLoggedIn(),
   async (request, response) => {
+    console.log(request.body);
        try {
         await Option.updateOption(
           request.body.optionName,
@@ -502,7 +503,7 @@ app.get(
         userName: admin.name,
         election: election,
         question: question,
-        csrf: request.csrfToken(),
+        csrfToken: request.csrfToken(),
       });
     }
  );
@@ -591,7 +592,7 @@ app.get(
       response.render("updatevoter", {
         voter: voter,
         election: election,
-        csrf: request.csrfToken(),
+        csrfToken: request.csrfToken(),
       });
     }
 );
@@ -612,7 +613,7 @@ app.post(
       }
     }
   );
-  app.get(
+/*  app.get(
     "/election/:electionId/question/:questionId/options/:optionId/change",
     connectEnsureLogin.ensureLoggedIn(),
     async (request, response) => {
@@ -626,14 +627,13 @@ app.post(
           question: Question,
           election: election,
           option: option,
-          csrf: request.csrfToken(),
+          csrfToken: request.csrfToken(),
         });
       }
    
   );
   app.post(
-    "/election/:electionId/question/:questionId/options/:optionId/change",
-    connectEnsureLogin.ensureLoggedIn(),
+    "/election/:electionId/question/:questionId/options/:optionId/change",connectEnsureLogin.ensureLoggedIn(),
     async (request, response) => {
            try {
           await Option.updateOption(request.body.optionName,request.params.optionId);
@@ -644,7 +644,7 @@ app.post(
           return;
         }
       }
-   );
+   );*/
 app.delete(
   "/:id/voterdelete/:electionid",
   connectEnsureLogin.ensureLoggedIn(),
