@@ -12,6 +12,8 @@
     <link href="./css/styles.css" rel="stylesheet">
     </head>
     <body>
+       
+
         <div class="grid grid-cols-6">
             <div class="col-start-3 col-span-2">
                 <%- include('header.ejs') %>
@@ -29,6 +31,25 @@
                   <% } %>
                  <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
                        <a href="/signout" class="text-green-600 ">Signout</a>
+                       <div>
+                        <% if (election.completed) { %>
+                                  <div>
+                                    <h2 class=" text-green-900  text-xl font-bold"><b>Election is Completed</b></h2>
+                                 </div>
+                               <div>
+                                <h2 class=" text-green-900  text-xl font-bold"><b>Click on the given link to vote :</b></h2>
+                                <a href="/launch/<%=urlName%>/"  class="py-1 hover:text-green-800 text-blue-600" target="_blank">https://e-voting-8c97.onrender.com/launch/<%=urlName%></a>
+                                </div>
+                          <% } else if (election.launched) { %>
+                             <div>
+                                <h2 class=" text-green-900  text-xl font-bold"><b>Election is in Running Mode</b></h2>
+                              </div>
+                               <div>
+                            <h2 class=" text-green-900  text-xl font-bold"><b>Click on the given link to vote :</b></h2>
+                            <a href="/launch/<%=urlName%>/"  class="py-1 hover:text-green-800 text-blue-600" target="_blank">https://e-voting-8c97.onrender.com/launch/<%=urlName%></a>
+                              </div>
+                            <% } %>
+                    </div>
                     <div class="py-3">
                         <h2 class=" text-green-900  text-xl font-bold">This election has <%= countQuestion %> Questions </h2>
                     </div>
@@ -43,9 +64,9 @@
                     </div>
                     <div class="py-3"> 
                         <a href="/election/<%=id%>/launch" class="hover:bg-green-800 bg-green-400 text-white  py-1.5 rounded font-medium px-5 py-2">Launch election</a>
-                        <a href=" " class="hover:bg-green-800 bg-green-400 text-white  py-1.5 rounded font-medium px-5 py-2">Preview</a>
+                        <a href="/election/<%= election.id %>/displayelection " class="hover:bg-green-800 bg-green-400 text-white  py-1.5 rounded font-medium px-5 py-2">Preview</a>
                         <a href=" " class="hover:bg-green-800 bg-green-400 text-white  py-1.5 rounded font-medium px-5 py-2">Result</a>
-                        <a href=" " class="bg-green-400 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">End</a>
+                        <a href="/election/<%=id%>/end" class="bg-green-400 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">End</a>
                         
                     </div>
                 </form>

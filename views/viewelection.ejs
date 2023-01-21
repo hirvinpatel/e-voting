@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <title>
+        <%= title %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="item-center">
+                <h1 class="py-4"><span class="text-4xl font-dark"><%= title %></span></h1>
+         <div>
+         <a href="/launch/<%=urlName%>" class="text-green-600"><u>Sign out</u></a>
+            <br>
+            <div>
+            <h1 class="py-4"><b>Answer the Following Questions:</b></h1>
+            </div>
+            <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+            <form action="/<%=electionId%>/launch/<%=urlName%>" method="post">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                            <ol class="list-[upper-roman]">
+                                <% for(let i=0; i<question.length; i++) { %>
+                                    <li class="my-3">
+                                        <div class="px-3 py-1">
+                                            <h3 class="text-3xl my-3"><%= question[i].questionName %&gt;</h3>
+                                            <p class="text-black-800 text-md my-3"><%= question[i].description %{">"}</p>
+                                        </div>
+                                        <div class="ml-8">
+                                            <ol class="list-none">
+                                                <% for(let j=0; j<optionsnew[i].length; j++) { %>
+                                                        <li class="option-item mt-2 cursor-pointer">
+                                                            <input type="radio" id="<%= optionsnew[i][j].id %>" class="cursor-pointer" name="question-<%= question[i].id %>" value="<%= optionsnew[i][j].id%>">
+                                                            <label class="px-1 my-2 cursor-pointer" for="<%= optionsnew[i][j].id %>" class="ml-2 text-lg "><%= optionsnew[i][j].optionName %></label>
+                                                        </li>
+                                                <% } %>
+                                            </ol>
+                                        </div>
+                                    </li>
+                                <% } %>
+                            </ol>
+                            <div class="flex py-4">
+                                <button type="submit" class="text-white bg-green-600 hover:bg-green-800 font-medium rounded px-3 py-1">
+                                    Submit 
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        
+    </body>
+</html>

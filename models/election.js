@@ -1,5 +1,5 @@
-'use strict';
-const {  Model} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Election extends Model {
     /**
@@ -12,36 +12,33 @@ module.exports = (sequelize, DataTypes) => {
       Election.belongsTo(models.Admin, {
         foreignKey: "adminId",
       });
-      Election.hasMany(models.Voter,{
+      Election.hasMany(models.Voter, {
         foreignKey: "electionId",
       });
-      Election.hasMany(models.Question,{
+      Election.hasMany(models.Question, {
         foreignKey: "electionId",
-      })
+      });
     }
 
     static addElection({ electionName, adminId, urlName }) {
       return this.create({
-        electionName:electionName,
+        electionName: electionName,
         adminId: adminId,
         urlName: urlName,
-      
       });
     }
 
     static getElectionUrl(urlName) {
-      return this.findone({
-        where:
-        {
+      return this.findOne({
+        where: {
           urlName,
         },
-         order: [["id", "ASC"]] ,
-        });
+        order: [["id", "ASC"]],
+      });
     }
     static getUrlName(urlName) {
-      return this.findone({
-        where:
-        {
+      return this.findOne({
+        where: {
           urlName,
         },
       });
@@ -66,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.update(
         {
           launched: true,
+          completed: false,
         },
         {
           where: {
@@ -75,9 +73,10 @@ module.exports = (sequelize, DataTypes) => {
       );
     }
     static end(id) {
-      return this.Election.update(
+      return this.update(
         {
-          ended: true,
+          launched: false,
+          completed: true,
         },
         {
           where: {
@@ -86,17 +85,18 @@ module.exports = (sequelize, DataTypes) => {
         }
       );
     }
-   
-   
   }
-  Election.init({
-    electionName: DataTypes.STRING,
-    urlName: DataTypes.STRING,
-    completed: DataTypes.BOOLEAN,
-    launched: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'Election',
-  });
+  Election.init(
+    {
+      electionName: DataTypes.STRING,
+      urlName: DataTypes.STRING,
+      completed: DataTypes.BOOLEAN,
+      launched: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: "Election",
+    }
+  );
   return Election;
 };

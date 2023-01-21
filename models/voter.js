@@ -66,7 +66,8 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
     },
     password: DataTypes.STRING,
-    voted: DataTypes.BOOLEAN
+    voted: DataTypes.BOOLEAN,
+    role:DataTypes.STRING,
   },
    {
     sequelize,

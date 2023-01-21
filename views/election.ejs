@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <title>
         <%= title %>
     </title>
@@ -15,6 +15,7 @@
         <div class="grid grid-cols-6">
             <div class="col-start-3 col-span-2">
                 <%- include('header.ejs') %>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div>
                     <a href="/signout" class="text-green-600 ">Signout</a>
                 </div>
@@ -33,11 +34,11 @@
             <div class="flex-auto">
                 <%- include('electionlist.ejs') %>
             </div>
-              <!--  <% if(messages && messages.error && messages.error.length > 0)  { %>
+               <% if(messages && messages.error && messages.error.length > 0)  { %>
                     <% for(var i=0; i<messages.error.length; i++) { %>
                             <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
                     <% } %>
-                  <% } %>-->
+                  <% } %>
                 
                 
                 

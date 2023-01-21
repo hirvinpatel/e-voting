@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <title>
+        <%= title %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+                <%- include('header.ejs') %>
+                <h1 class="py-4"><b> View Election</b></h1>
+               <% if(messages && messages.error && messages.error.length > 0)  { %>
+                    <% for(var i=0; i<messages.error.length; i++) { %>
+                            <h3 class="text-red-900 font-bold"> <%= messages.error[i] %></h3>
+                    <% } %>
+                  <% } %>
+                  <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
+                  <a href="/signout" class="text-green-600 ">Signout</a>
+                  <div>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                    <a href="/voter/electionlist/<%= election.id %>" class="px-10 text-green-600 mt-10"><u>Go to Election Page</u></a>
+                    <% for (let i=0; i<question.length; i++) { %>
+                        <div>
+                            <p class="font-bold text"><%= i+1 %>. <%= question[i].questionName %></p>
+                            <p class="text-gray-600"><%= question[i].description %></p>
+                            <div class="pt-3 pl-5">
+                                <% for (let j=0; j<option[i].length; j++) { %>
+                                  <div class="flex gap-2">
+                                    <input 
+                                        class="border-2 flex items-center border-black p-2"
+                                        id="<%= question[i].id %>-<%= option[i][j].id %>"
+                                        type="radio"
+                                        value="<%= option[i][j].id %>"
+                                        name="<%= question[i].id %>"
+                                    />
+                                    <label for="<%= question[i].id %>-<%= option[i][j].id %>"><%= option[i][j].optionName %></label>
+                                  </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                   </div>
+                  
+                
+            </div>
+        </div>
+    </body>
+    </html>
