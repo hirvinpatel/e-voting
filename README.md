@@ -39,4 +39,4 @@ Admin and Voter
 ![ElectionEnd](https://user-images.githubusercontent.com/81803101/213903061-80f57981-5a69-40e3-9333-98270d3c2d3c.png)
 ## Election Preview
 ![PreviewElection](https://user-images.githubusercontent.com/81803101/213903063-c0dd9e6d-f494-48af-96d7-d46c17a93cb3.png)
-## Link of Video Screen Cast:
+## Link of Video Screen Cast:https://www.loom.com/share/1ea694b4caef4bf2b87e370a27ef9abb
