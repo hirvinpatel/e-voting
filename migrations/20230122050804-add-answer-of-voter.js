@@ -59,3 +59,4 @@ module.exports = {
     await queryInterface.removeColumn("Answers", "optionSelected");
   },
 };
+

@@ -9,15 +9,14 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.addColumn("Voters", "electionId", {
+    await queryInterface.addColumn("Elections", "adminId", {
       type: Sequelize.DataTypes.INTEGER,
-      onDelete: "CASCADE",
     });
-    await queryInterface.addConstraint("Voters", {
-      fields: ["electionId"],
+    await queryInterface.addConstraint("Elections", {
+      fields: ["adminId"],
       type: "foreign key",
       references: {
-        table: "Elections",
+        table: "Admins",
         field: "id",
       },
     });
@@ -30,6 +29,9 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.removeColumn("Voters", "electionId");
+    await queryInterface.removeColumn("Elections", "adminId");
   }
 };
+
+
+
