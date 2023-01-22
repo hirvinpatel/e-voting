@@ -137,7 +137,7 @@ app.get("/", async (request, response) => {
     }
   } else {
     response.render("index", {
-      title: "Online Voting Application",
+      title: "E-Voting",
       // csrfToken: request.csrfToken(),
     });
   }
