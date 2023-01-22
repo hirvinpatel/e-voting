@@ -682,68 +682,7 @@ app.post(
     }
   }
 );
-app.get("/voter/:urlName/", async (request, response) => {
-  if (request.user === false) {
-    request.flash("error", "Kindly login before casting vote");
-    return response.redirect(`/launch/${request.params.urlName}`);
-  }
-  const election = await Election.getElectionUrl(request.params.urlName);
 
-  if (request.user.voted && election.launched) {
-    request.flash("error", "Thank you for Voting");
-    return response.redirect(`/voter/${request.params.urlName}/thank`);
-  }
-
-  try {
-    const election = await Election.getElectionUrl(request.params.urlName);
-    if (request.user.role === "voter") {
-      if (election.launched) {
-        const question = await Question.getAllQuestion(election.id);
-        let optionsnew = [];
-        for (let i = 0; i < question.length; i++) {
-          const optionlist = await Option.getAllOption(question[i].id);
-          optionsnew.push(optionlist);
-        }
-        console.log("CSRF==>", request.csrfToken());
-        return response.render("viewelection", {
-          urlName: request.params.urlName,
-          id: election.id,
-          title: election.electionName,
-          electionId: election.id,
-          question,
-          optionsnew,
-          csrfToken: request.csrfToken(),
-        });
-      } else {
-        return response.render("invalid");
-      }
-    } else if (request.user.role === "admin") {
-      request.flash("error", "You have signed in as admin");
-      return response.redirect(`/electionlist/${election.id}`);
-    }
-  } catch (error) {
-    console.log(error);
-    return response.status(422).json(error);
-  }
-});
-
-app.post(
-  "/voter/:urlName",
-  passport.authenticate("voter-local", {
-    failureRedirect: "back",
-    failureFlash: true,
-  }),
-  async (request, response) => {
-    return response.redirect(`/voter/${request.params.urlName}`);
-    //  return response.render("viewelection", {
-    //  csrfToken: request.csrfToken(),
-
-    //});
-  }
-);
-app.get("/voter/:urlName/thank", async (request, response) => {
-  response.render("thank");
-});
 app.get(
   "/election/:electionId/voter/:voterId/edit",
   connectEnsureLogin.ensureLoggedIn(),
@@ -857,6 +796,65 @@ app.get("/voter/electionlist/:id", async (request, response) => {
     }
   }
 });
+app.get("/voter/:urlName/", async (request, response) => {
+//  console.log(request.csrfToken());
+ // console.log(req.session)
+  if (request.user === undefined) {
+    request.flash("error", "First login before giving vote");
+    return response.redirect(`/launch/${request.params.urlName}`);
+  }
+  const election = await Election.getElectionUrl(request.params.urlName);
+
+  if (request.user.voted && election.launched) {
+    request.flash("error", "Thank you for Voting");
+    return response.redirect(`/voter/${request.params.urlName}/thank`);
+  }
+
+  try {
+    const election = await Election.getElectionUrl(request.params.urlName);
+    if (request.user.role === "voter") {
+      if (election.launched) {
+        let options = [];
+        const question = await Question.getAllQuestion(election.id);
+        for (let i = 0; i < question.length; i++) {
+          const optionlist = await Option.getAllOption(question[i].id);
+          options.push(optionlist);
+        }
+        return response.render("viewelection", {
+          urlName: request.params.urlName,
+          id: election.id,
+          question,
+          election,
+          options,
+          title: election.electionName,
+          electionId: election.id,
+          csrfToken: request.csrfToken(),
+        });
+      } else {
+        return response.render("error");
+      }
+    } else if (request.user.role === "admin") {
+      request.flash("error", "You have signed in as admin");
+      return response.redirect(`/electionlist/${election.id}`);
+    }
+  } catch (error) {
+    console.log(error);
+    return response.status(422).json(error);
+  }
+});
+
+app.post("/voter/:urlName",
+  passport.authenticate("voter-local", {
+    failureRedirect: "back",
+    failureFlash: true,
+  }),
+  async (request, response) => {
+    return response.redirect(`/voter/${request.params.urlName}`);
+  }
+);
+app.get("/voter/:urlName/thank", async (request, response) => {
+  response.render("thank");
+});
 app.get(
   "/election/:id/launch",
   connectEnsureLogin.ensureLoggedIn(),
@@ -866,30 +864,21 @@ app.get(
         where: { electionId: request.params.id },
       });
       if (question.length <= 1) {
-        request.flash(
-          "error",
-          "Please enter atleast two questions for Election!!!"
-        );
+        request.flash("error", "Please enter atleast two questions for Election!!!");
         return response.redirect(`/electionlist/${request.params.id}`);
       }
 
       for (let i = 0; i < question.length; i++) {
         const option = await Option.getAllOption(question[i].id);
         if (option.length <= 1) {
-          request.flash(
-            "error",
-            "Kindly add atleast two options to the question!!!"
-          );
+          request.flash("error","please add atleast two options to the question!!!");
           return response.redirect(`/electionlist/${request.params.id}`);
         }
       }
 
       const voters = await Voter.getAllVoter(request.params.id);
       if (voters.length <= 1) {
-        request.flash(
-          "error",
-          "please enter atleast two voters to conduct election"
-        );
+        request.flash("error","please enter atleast two voters to conduct election");
         return response.redirect(`/electionlist/${request.params.id}`);
       }
 
@@ -904,49 +893,51 @@ app.get(
     }
   }
 );
+
 app.get("/launch/:urlName", async (request, response) => {
   try {
+    let optionValue = [];
+    let optionsNo = [];
+    let questionNames = [];
     const election = await Election.getElectionUrl(request.params.urlName);
     const questionslist = await Question.getAllQuestion(election.id);
     const answerslist = await Answer.getAllAnswer(election.id);
-    let valueoptions = [];
-    let numberofoptions = [];
-    let questionnames = [];
-    for (var k = 0; k < questionslist.length; k++) {
-      questionnames.push(questionslist[k].questionName);
+    for (var i = 0; i < questionslist.length; i++) {
+      questionNames.push(questionslist[i].questionName);
     }
-
     for (let i = 0; i < questionslist.length; i++) {
       let optionslist = await Option.getAllOption(questionslist[i].id);
-      valueoptions.push(optionslist);
+      optionValue.push(optionslist);
       let answeroptions = [];
-      console.log(optionslist);
+      console.log("LIST OF OPTIONS",optionslist);
       for (let j = 0; j < optionslist.length; j++) {
         let answerslist = await Answer.getCountOption(
           optionslist[j].id,
           election.id,
           questionslist[i].id
         );
-        console.log(answerslist);
-        answeroptions.push(answerslist);
+        console.log("LIST OF Answers",answerslist);
+       answeroptions.push(answerslist);
       }
-      numberofoptions.push(answeroptions);
+      
+      optionsNo.push(answeroptions);
     }
-    if (!election.launched && election.ended) {
-      response.render("resultpage", {
-        title: election.electionName,
-        questionslist,
-        answerslist,
-        questionnames,
-        valueoptions,
-        numberofoptions,
-      });
-    } else {
+    if(election.launched){
       return response.render("voterlogin", {
         urlName: election.urlName,
         csrfToken: request.csrfToken(),
       });
     }
+    else if (!election.launched && election.ended) {
+      response.render("resultpage", {
+        title: election.electionName,
+        questionslist,
+        optionValue,
+        optionsNo,
+        answerslist,
+        questionnames,
+      });
+    } 
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
@@ -1055,11 +1046,8 @@ app.delete(
   }
 );
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
   console.log(err);
   res.status(err.status || 500);
   res.render("error", {

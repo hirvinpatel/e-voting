@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       Voter.belongsTo(models.Election, {
         foreignKey: "electionId",
       });
+      Voter.hasMany(models.Answer, {
+        foreignKey: "voterId",
+        onDelete: "CASCADE",
+      });
     }
     static addVoter(voterId, password, electionId) {
       return this.create({
@@ -50,10 +54,10 @@ module.exports = (sequelize, DataTypes) => {
         }
       );
     }
-    static deleteVoter(voterId) {
+    static deleteVoter(id) {
       return this.destroy({
         where: {
-          voterId,
+          id,
         },
       });
     }

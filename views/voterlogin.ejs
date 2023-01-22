@@ -23,7 +23,7 @@
                   <% } %>
                   <h3 class="text-green-600"><u><a href="/">Home</a></u></h3>
                 <form action="/voter/<%=urlName%>" method="post"> 
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"> 
                         <div class="py-3">
                         <label for="voterId">Voter ID:</label>
                         <input type="voterId" id="voterId" placeholder="Enter Voter Id" class="border border-gray-300 text-gray-900 rounded p-2 w-full" name="voterId" required/>
@@ -36,9 +36,9 @@
                     <div class="py-3"> 
                         <button type="submit" class="bg-green-600 text-white hover:bg-green-800 py-1.5 rounded font-medium px-5 py-2">Sign In</button>
                     </div>
-                    
+             
                 </form>
-                
+             
             </div>
         </div>
     </body>
