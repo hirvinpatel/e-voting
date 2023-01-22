@@ -9,8 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue: "voter",
+      },
       voterId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        unique:true,
       },
       password: {
         type: Sequelize.STRING
