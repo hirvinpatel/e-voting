@@ -9,10 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      role: {
-        type: Sequelize.STRING,
-        defaultValue: "voter",
-      },
+      
       voterId: {
         type: Sequelize.STRING,
         unique:true,
@@ -22,6 +19,10 @@ module.exports = {
       },
       voted: {
         type: Sequelize.BOOLEAN
+      },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue: "voter",
       },
       createdAt: {
         allowNull: false,
