@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
         electionId: electionId,             
       });
     }
-    static async countQuestion(electionId) {
-      return await this.count({
+    static countQuestion(electionId) {
+      return this.count({
         where: {
           electionId,
         },
